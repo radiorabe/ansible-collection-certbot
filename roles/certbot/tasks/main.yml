@@ -1,0 +1,30 @@
+---
+# tasks file for certbot
+- name: Ensure requirements are in place
+  ansible.builtin.dnf:
+    name:
+      - "{{ certbot_certbot_package_name }}"
+      - "{{ certbot_rsync_package_name }}"
+    state: present
+  become: true
+
+- name: Make sure certbot timer is enabled
+  ansible.builtin.systemd:
+    enabled: true
+    name: "{{ certbot_certbot_systemd_timer_name }}"
+
+- name: Write script for pushing certificates to remote host
+  ansible.builtin.template:
+      src: templates/cert_sync.sh.j2
+      dest: "{{ certbot_certsync_script_path }}"
+
+- name: Add deploy hook to {{ certbot_certbot_sysconfig }}
+  ansible.builtin.command: sed -i 's/^DEPLOY_HOOK=""/DEPLOY_HOOK="--deploy-hook \\\"\/usr\/bin\/sh \/usr\/local\/libexec\/cert_sync.sh\\\""/' {{ certbot_certbot_sysconfig_path }}
+
+- name: Add certificates to certbot
+  ansible.builtin.command: "{{ certbot_certbot_binary_path }} certonly \
+    --standalone --non-interactive -m {{ certbot_acme_account_mail }} --keep-until-expiring   
+    --domains {{ certbot_certificates }}"
+
+- name: Update ACME account
+  ansible.builtin.command: "{{ certbot_certbot_binary_path }} update_account -m {{ certbot_acme_account_mail }}"

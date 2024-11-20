@@ -1,0 +1,19 @@
+---
+# defaults file for certbot
+certbot_acme_account_mail: certbot@rabe.ch
+certbot_certbot_package_name: certbot
+certbot_certbot_binary_path: /usr/bin/certbot
+certbot_certbot_sysconfig_path: /etc/sysconfig/certbot
+certbot_certsync_script_path: /usr/local/libexec/cert_sync.sh
+certbot_rsync_package_name: rsync
+certbot_certbot_systemd_timer_name: certbot-renew.timer
+certbot_certificates_src: /etc/letsencrypt/live/
+certbot_ceriticates_dest: /home/{certbot_remot_user}/httpd/rabe_certs
+certbot_certificates: letest.rabe.ch,letest2.rabe.ch
+certbot_remote_hosts: [ "localhost" ]
+certbot_remote_user: revproxy
+certbot_remote_container: true
+certbot_remote_container_name: revproxy-revproxy
+certbot_remote_container_signal: USR1
+certbot_remote_container_runtime_path: /usr/bin/podman
+certbot_rsync_binary_path: /usr/bin/rsync

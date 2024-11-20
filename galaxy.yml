@@ -1,0 +1,21 @@
+namespace: radiorabe
+name: certbot
+version: 0.0.0
+readme: README.md
+authors:
+  - Simon Nussbaum <@smirta>
+description: Ansible collection that installs certbot for issuing letsencrypt certificates and pushing them to remote host.
+license_file: LICENSE
+tags:
+  - radiorabe
+  - foreman
+  - letsencrypt
+  - certbot
+  - container
+  - podman
+  - docker
+dependencies: {}
+repository: https://github.com/radiorabe/ansible-collection-certbot
+documentation: https://github.com/radiorabe/ansible-collection-certbot/blob/main/README.md
+homepage: hhttps://github.com/radiorabe/ansible-collection-certbot
+issues: https://github.com/radiorabe/ansible-collection-certbot/issues

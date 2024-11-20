@@ -1,0 +1,23 @@
+#!/bin/sh
+source_dir={{ certbot_certificates_src }}
+user={{ certbot_remote_user }}
+destination_dir={{ certbot_ceriticates_dest }}
+containername={{ certbot_remote_container_name }}
+exitcode=0
+
+sync_and_reload ()
+{
+  {{ certbot_rsync_binary_path }} --timeout=2 --copy-links --recursive --chmod=Fg+r \
+	  ${source_dir} ${user}@${1}:${destination_dir}
+  let "exitcode+=$?"
+{% if certbot_remote_container == true %}
+  /usr/bin/ssh -o ConnectTimeout=2 ${user}@${1} \
+	  "{{ certbot_remote_container_runtime_path }} kill --signal=\"{{ certbot_remote_container_signal }}\" ${containername}"
+  let "exitcode+=$?"
+{% endif %}
+}
+
+{% for remote_host in certbot_remote_hosts %}
+sync_and_reload "{{ remote_host }}"
+{% endfor %}
+exit $exitcode
