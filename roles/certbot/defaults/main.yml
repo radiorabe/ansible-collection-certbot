@@ -8,7 +8,7 @@ certbot_certsync_script_path: /usr/local/libexec/cert_sync.sh
 certbot_rsync_package_name: rsync
 certbot_certbot_systemd_timer_name: certbot-renew.timer
 certbot_certificates_src: /etc/letsencrypt/live/
-certbot_ceriticates_dest: /home/revproxy/httpd/rabe_certs
+certbot_ceriticates_dest: /home/{{certbot_remote_user}}/httpd/rabe_certs
 certbot_certificates: letest.rabe.ch,letest2.rabe.ch
 certbot_remote_hosts: [ "localhost" ]
 certbot_remote_user: revproxy
