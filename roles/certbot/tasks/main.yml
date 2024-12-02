@@ -18,7 +18,7 @@
       src: templates/cert_sync.sh.j2
       dest: "{{ certbot_certsync_script_path }}"
 
-- name: Add deploy hook to {{ certbot_certbot_sysconfig }}
+- name: Add deploy hook to {{ certbot_certbot_sysconfig_path }}
   ansible.builtin.command: sed -i 's/^DEPLOY_HOOK=""/DEPLOY_HOOK="--deploy-hook \\\"\/usr\/bin\/sh \/usr\/local\/libexec\/cert_sync.sh\\\""/' {{ certbot_certbot_sysconfig_path }}
 
 - name: Add certificates to certbot
