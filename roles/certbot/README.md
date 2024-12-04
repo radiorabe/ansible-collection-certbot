@@ -19,7 +19,7 @@ None.
 | `certbot_certbot_systemd_timer_name` | `certbot.timer` | name of certbot systemd timer for certificate renewals. |
 | `certbot_certificates_src` | `/etc/letsencrypt/live/` | source directory of issued certificates and keys. |
 | `certbot_ceriticates_dest` | `/home/{certbot_remot_user}/httpd/rabe_certs` | destination of certificates and keys on remote host. |
-| `certbot_certificates` | `letest.rabe.ch, letest2.rabe.ch` | comma separated list of certificates managed by certbot |
+| `certbot_certificates` | `[ "letest.rabe.ch", "letest2.rabe.ch" ]` | list of certificates managed by certbot |
 | `certbot_remote_hosts` | `[ "localhost" ]` | list of remote hosts requiring issued certificates and keys. |
 | `certbot_remote_user` | `revproxy` | remote user. |
 | `certbot_remote_container` | `false` | set to true if a container needs signal (`certbot_remote_container_signal`) for reading new certificates. |
@@ -48,7 +48,7 @@ None
           certbot_certbot_systemd_timer_name: certbot-renew.timer
           certbot_certificates_src: /etc/letsencrypt/live/
           certbot_ceriticates_dest: /home/{certbot_remot_user}/httpd/rabe_certs
-          certbot_certificates: letest.rabe.ch,letest2.rabe.ch
+          certbot_certificates: [ "letest.rabe.ch", "letest2.rabe.ch" ]
           certbot_remote_hosts: [ "localhost" ]
           certbot_remote_user: revproxy
           certbot_remote_container: true
