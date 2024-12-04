@@ -23,8 +23,10 @@
 
 - name: Add certificates to certbot
   ansible.builtin.command: "{{ certbot_certbot_binary_path }} certonly \
-    --standalone --non-interactive -m {{ certbot_acme_account_mail }} --keep-until-expiring   
-    --domains {{ certbot_certificates }}"
+    --standalone --non-interactive -m {{ certbot_acme_account_mail }} \
+    --deploy-hook '/usr/bin/sh /usr/local/libexec/cert_sync.sh'
+    --domains {{ item }} --agree-tos"
+  loop: "{{ certbot_certificates }}"
 
 - name: Update ACME account
   ansible.builtin.command: "{{ certbot_certbot_binary_path }} update_account -m {{ certbot_acme_account_mail }}"
