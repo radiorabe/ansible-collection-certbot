@@ -8,6 +8,20 @@
     state: present
   become: true
 
+- name: Configure certbot
+  community.general.ini_file:
+    path: "{{ certbot_client_ini }}"
+    mode: "644"
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+  loop:
+    - option: email
+      value: "{{ certbot_acme_account_mail }}"
+    - option: agree-tos
+      value: true
+    - option: non-interactive
+      value: true
+
 - name: Make sure certbot timer is enabled
   ansible.builtin.systemd:
     enabled: true
@@ -15,9 +29,9 @@
 
 - name: Write script for pushing certificates to remote host
   ansible.builtin.template:
-   src: templates/cert_sync.sh.j2
-   dest: "{{ certbot_certsync_script_path }}"
-   mode: "755"
+    src: templates/cert_sync.sh.j2
+    dest: "{{ certbot_certsync_script_path }}"
+    mode: "755"
 
 - name: Add deploy hook to {{ certbot_certbot_sysconfig_path }}
   ansible.builtin.lineinfile:
@@ -27,10 +41,10 @@
 
 - name: Add certificates to certbot
   ansible.builtin.command: "{{ certbot_certbot_binary_path }} certonly \
-    --standalone --non-interactive -m {{ certbot_acme_account_mail }} \
+    --standalone \
     --deploy-hook '/usr/local/libexec/cert_sync.sh'
-    --domains {{ item }} --agree-tos"
+    --domains {{ item }}"
   loop: "{{ certbot_certificates }}"
 
 - name: Update ACME account
-  ansible.builtin.command: "{{ certbot_certbot_binary_path }} update_account -m {{ certbot_acme_account_mail }}"
+  ansible.builtin.command: "{{ certbot_certbot_binary_path }} update_account"

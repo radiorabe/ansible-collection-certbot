@@ -14,8 +14,9 @@ tags:
   - container
   - podman
   - docker
-dependencies: {}
+dependencies:
+  community.general: ">=9.5.0"
 repository: https://github.com/radiorabe/ansible-collection-certbot
 documentation: https://github.com/radiorabe/ansible-collection-certbot/blob/main/README.md
-homepage: hhttps://github.com/radiorabe/ansible-collection-certbot
+homepage: https://github.com/radiorabe/ansible-collection-certbot
 issues: https://github.com/radiorabe/ansible-collection-certbot/issues

@@ -7,10 +7,12 @@ certbot_certbot_sysconfig_path: /etc/sysconfig/certbot
 certbot_certsync_script_path: /usr/local/libexec/cert_sync.sh
 certbot_rsync_package_name: rsync
 certbot_certbot_systemd_timer_name: certbot-renew.timer
-certbot_certificates_src: /etc/letsencrypt/live/
-certbot_certificates_dest: /home/{{certbot_remote_user}}/httpd/rabe_certs
-certbot_certificates: [ "letest.rabe.ch", "letest2.rabe.ch" ]
-certbot_remote_hosts: [ "localhost" ]
+certbot_config_dir: /etc/letsencrypt
+certbot_client_ini: "{{ certbot_config_dir }}/cli.ini"
+certbot_certificates_src: "{{ certbot_config_dir }}/live/"
+certbot_certificates_dest: /home/{{ certbot_remote_user }}/httpd/rabe_certs
+certbot_certificates: ["letest.rabe.ch", "letest2.rabe.ch"]
+certbot_remote_hosts: ["localhost"]
 certbot_remote_user: revproxy
 certbot_remote_container: true
 certbot_remote_container_name: revproxy-revproxy
