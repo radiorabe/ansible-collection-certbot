@@ -37,14 +37,30 @@
   ansible.builtin.lineinfile:
     path: "{{ certbot_certbot_sysconfig_path }}"
     regexp: "^DEPLOY_HOOK="
-    line: DEPLOY_HOOK="--deploy-hook /usr/local/libexec/cert_sync.sh"
+    line: DEPLOY_HOOK="--deploy-hook {{ certbot_certsync_script_path }}"
 
 - name: Add certificates to certbot
-  ansible.builtin.command: "{{ certbot_certbot_binary_path }} certonly \
-    --standalone \
-    --deploy-hook '/usr/local/libexec/cert_sync.sh'
-    --domains {{ item }}"
+  ansible.builtin.command:
+    argv:
+      - "{{ certbot_certbot_binary_path }}"
+      - certonly
+      - --standalone
+      - --deploy-hook
+      - "{{ certbot_certsync_script_path }}"
+      - --domains={{ item }}
+    creates: "{{ certbot_certificates_src }}/{{ item }}/cert.pem"
+  register: _certbot_certbot_certonly
+  changed_when: _certbot_certbot_certonly.rc
   loop: "{{ certbot_certificates }}"
+
+- name: Check ACME Account
+  ansible.builtin.command: "{{ certbot_certbot_binary_path }} show_account"
+  register: _certbot_certbot_show_account
+  changed_when: false
+  check_mode: false
 
 - name: Update ACME account
   ansible.builtin.command: "{{ certbot_certbot_binary_path }} update_account"
+  when: certbot_acme_account_mail not in _certbot_certbot_show_account.stdout
+  register: _certbot_certbot_update_account
+  changed_when: _certbot_certbot_update_account.rc
