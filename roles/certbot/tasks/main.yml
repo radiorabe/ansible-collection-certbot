@@ -20,7 +20,10 @@
    mode: "755"
 
 - name: Add deploy hook to {{ certbot_certbot_sysconfig_path }}
-  ansible.builtin.command: sed -i 's/^DEPLOY_HOOK=""/DEPLOY_HOOK="--deploy-hook \\\"\/usr\/local\/libexec\/cert_sync.sh\\\""/' {{ certbot_certbot_sysconfig_path }}
+  ansible.builtin.lineinfile:
+    path: "{{ certbot_certbot_sysconfig_path }}"
+    regexp: "^DEPLOY_HOOK="
+    line: DEPLOY_HOOK="--deploy-hook /usr/local/libexec/cert_sync.sh"
 
 - name: Add certificates to certbot
   ansible.builtin.command: "{{ certbot_certbot_binary_path }} certonly \
