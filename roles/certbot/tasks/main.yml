@@ -15,16 +15,17 @@
 
 - name: Write script for pushing certificates to remote host
   ansible.builtin.template:
-      src: templates/cert_sync.sh.j2
-      dest: "{{ certbot_certsync_script_path }}"
+   src: templates/cert_sync.sh.j2
+   dest: "{{ certbot_certsync_script_path }}"
+   mode: "755"
 
 - name: Add deploy hook to {{ certbot_certbot_sysconfig_path }}
-  ansible.builtin.command: sed -i 's/^DEPLOY_HOOK=""/DEPLOY_HOOK="--deploy-hook \\\"\/usr\/bin\/sh \/usr\/local\/libexec\/cert_sync.sh\\\""/' {{ certbot_certbot_sysconfig_path }}
+  ansible.builtin.command: sed -i 's/^DEPLOY_HOOK=""/DEPLOY_HOOK="--deploy-hook \\\"\/usr\/local\/libexec\/cert_sync.sh\\\""/' {{ certbot_certbot_sysconfig_path }}
 
 - name: Add certificates to certbot
   ansible.builtin.command: "{{ certbot_certbot_binary_path }} certonly \
     --standalone --non-interactive -m {{ certbot_acme_account_mail }} \
-    --deploy-hook '/usr/bin/sh /usr/local/libexec/cert_sync.sh'
+    --deploy-hook '/usr/local/libexec/cert_sync.sh'
     --domains {{ item }} --agree-tos"
   loop: "{{ certbot_certificates }}"
 
