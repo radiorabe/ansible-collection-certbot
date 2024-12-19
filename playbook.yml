@@ -1,3 +1,5 @@
-- hosts: all
+---
+- name: Run certbot role
+  hosts: all
   roles:
     - role: certbot
