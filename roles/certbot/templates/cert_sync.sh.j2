@@ -7,7 +7,7 @@ exitcode=0
 
 sync_and_reload ()
 {
-  {{ certbot_rsync_binary_path }} --timeout=2 --copy-links --recursive --chmod=Fg+r \
+  {{ certbot_rsync_binary_path }} --timeout=2 --copy-links --recursive --chmod=Fg+r,Da+rx \
 	  ${certbot_certificates_src} ${certbot_remote_user}@${1}:${certbot_certificates_dest}
   let "exitcode+=$?"
 {% if certbot_remote_container == true %}
