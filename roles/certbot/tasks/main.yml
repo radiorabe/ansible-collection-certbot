@@ -47,7 +47,8 @@
       - --standalone
       - --deploy-hook
       - "{{ certbot_certsync_script_path }}"
-      - --domains={{ item }}
+      - --domains
+      - "{{ item }}"
     creates: "{{ certbot_certificates_src }}/{{ item }}/cert.pem"
   register: _certbot_certbot_certonly
   changed_when: _certbot_certbot_certonly.rc
